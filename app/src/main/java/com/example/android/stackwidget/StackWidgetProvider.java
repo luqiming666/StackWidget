@@ -46,12 +46,13 @@ public class StackWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("onReceive " + intent.getAction());
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
         if (intent.getAction().equals(TOAST_ACTION)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-            Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "AppWidget ID: " + appWidgetId + ", Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
         }
         super.onReceive(context, intent);
     }
@@ -69,7 +70,7 @@ public class StackWidgetProvider extends AppWidgetProvider {
             // into the data so that the extras will not be ignored.
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-            rv.setRemoteAdapter(appWidgetIds[i], R.id.stack_view, intent);
+            rv.setRemoteAdapter(R.id.stack_view, intent);
 
             // The empty view is displayed when the collection has no items. It should be a sibling
             // of the collection view.
@@ -84,7 +85,7 @@ public class StackWidgetProvider extends AppWidgetProvider {
             toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
 
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);

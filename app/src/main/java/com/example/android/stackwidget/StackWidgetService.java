@@ -83,10 +83,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         // Next, we set a fill-intent which will be used to fill-in the pending intent template
         // which is set on the collection view in StackWidgetProvider.
-        Bundle extras = new Bundle();
-        extras.putInt(StackWidgetProvider.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
+        fillInIntent.putExtra(StackWidgetProvider.EXTRA_ITEM, position);
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
         // You can do heaving lifting in here, synchronously. For example, if you need to
